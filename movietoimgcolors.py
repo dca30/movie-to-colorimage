@@ -110,5 +110,4 @@ with Image.open(homepath+'images/'+filename+'.jpg') as original_image:
     bar.finish()
     print("\033[92m\033[1mPicture successfully oversized\033[0m")
     # Save the image
-    image.save(homepath+'images/'+filename+'GS.jpg')
-
+    image.save(homepath+'images/'+filename+'Colors.jpg')
