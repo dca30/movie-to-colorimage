@@ -1,8 +1,11 @@
 import cv2
+import os
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 from progress.bar import Bar
 
-filename ="video"
+filename ="Matrix2"
+
 homepath ='/home/diego/MovieToColorsImage/'
 # Open the video file
 video_path = homepath+'movies/'+filename+'.mp4'
@@ -79,22 +82,26 @@ image = np.zeros((height, width, 3), dtype=np.uint8)
 for i, color in enumerate(colors):
     image[:, i] = color
 
+# Create specific folder for each movie
+if not os.path.exists(homepath+'images/'+filename):
+    # Create the directory if it does not exist
+    os.mkdir(homepath+'images/'+filename)
 # Save the image to a file
-cv2.imwrite(homepath+'images/'+filename+'.jpg', image)
+cv2.imwrite(homepath+'images/'+filename+'/'+filename+'Line.jpg', image)
 
-
-from PIL import Image
+bar = Bar('Processing', max=int(total_seconds), suffix='%(percent)d%%' , width=50)
 
 # Open the original image
-with Image.open(homepath+'images/'+filename+'.jpg') as original_image:
-    # Resize the original image to fit within the 1920x1080 resolution
+with Image.open(homepath+'images/'+filename+'/'+filename+'Line.jpg') as original_image:
+
+    # Resize the original image to fit within the 10000x5000 resolution
     resized_image = original_image.resize((10000, 5000))
     
     # Create a blank image with the desired resolution
     image = Image.new('RGB', (10000, 5000))
     pixels = image.load()
     
-    bar = Bar('Processing', max=int(total_seconds), suffix='%(percent)d%%' , width=50)
+    
 
 
     # Iterate through the pixels and set the color for each pixel
@@ -110,4 +117,50 @@ with Image.open(homepath+'images/'+filename+'.jpg') as original_image:
     bar.finish()
     print("\033[92m\033[1mPicture successfully oversized\033[0m")
     # Save the image
-    image.save(homepath+'images/'+filename+'Colors.jpg')
+    #Imagen girada y agrandada
+    image.save(homepath+'images/'+filename+'/'+filename+'Colors.jpg')
+    
+    ##FRAME AND TITLE ADD
+    def add_title(image, title, font_path, font_size, x, y, text_color):
+        # Create a drawing context
+        draw = ImageDraw.Draw(image)
+
+        # Choose a font and font size
+        font = ImageFont.truetype(font_path, font_size)
+
+        # Draw the text on the image
+        draw.text((x, y), title, font=font, fill=text_color)
+
+    def add_frame_and_rotate(image, width, height, background_color):
+        # Create a new image with a white background
+        image = image.transpose(Image.ROTATE_270)
+        new_image = Image.new('RGB', (image.width + width, image.height + height), background_color)
+
+        # Paste the original image onto the new image
+        new_image.paste(image, (width // 2, height // 2))
+        return new_image
+
+    # Open the image file
+    image = Image.open(homepath+'images/'+filename+'/'+filename+'Colors.jpg')
+
+    # Add a frame to the image
+    image = add_frame_and_rotate(image, 1000, 1500, (255, 255, 255))
+
+    # Get the width and height of the image
+    width, height = image.size
+
+    # Choose a font and font size
+    font = ImageFont.truetype('fonts/DidotLTPro-Roman.ttf', 300)
+
+    # Get the width of the text in pixels
+    text_width, text_height = font.getsize(filename.upper())
+
+    # Calculate x and y coordinates for the text
+    x = width // 2 - text_width // 2
+    y = height - 600
+
+    # Add a title to the image
+    add_title(image, filename.upper(), 'fonts/DidotLTPro-Roman.ttf', 300, x, y, (1,1,1))
+
+    # Save the modified image
+    image.save(homepath+'images/'+filename+'/'+filename+'Final.jpg')

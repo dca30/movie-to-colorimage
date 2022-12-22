@@ -22,7 +22,7 @@ def rotate_image(image, angle):
   return image.transpose(Image.ROTATE_270)
 
 # Open the image file
-image = Image.open('MatrixGS.jpg')
+image = Image.open('/home/diego/MovieToColorsImage/images/TarzanColors.jpg')
 
 # Rotate the image
 image = rotate_image(image, 270)
@@ -37,14 +37,14 @@ width, height = image.size
 font = ImageFont.truetype('DidotLTPro-Roman.ttf', 400)
 
 # Get the width of the text in pixels
-text_width, text_height = font.getsize('THE MATRIX')
+text_width, text_height = font.getsize('TARZAN')
 
 # Calculate x and y coordinates for the text
 x = width // 2 - text_width // 2
 y = height - 600
 
 # Add a title to the image
-add_title(image, 'THE MATRIX', 'DidotLTPro-Roman.ttf', 300, x, y, (1,1,1))
+add_title(image, 'TARZAN', 'DidotLTPro-Roman.ttf', 300, x, y, (1,1,1))
 
 # Save the modified image
-image.save('finalImage.jpg')
+image.save('tarzanFinal.jpg')
