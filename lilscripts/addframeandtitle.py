@@ -22,7 +22,7 @@ def rotate_image(image, angle):
   return image.transpose(Image.ROTATE_270)
 
 # Open the image file
-image = Image.open('/home/diego/MovieToColorsImage/images/TarzanColors.jpg')
+image = Image.open('/home/diego/MovieToColorsImage/images/Watchmen/WatchmenColors.jpg')
 
 # Rotate the image
 image = rotate_image(image, 270)
@@ -34,17 +34,17 @@ image = add_frame(image, 1000, 1500, (255, 255, 255))
 width, height = image.size
 
 # Choose a font and font size
-font = ImageFont.truetype('DidotLTPro-Roman.ttf', 400)
+font = ImageFont.truetype('fonts/DidotLTPro-Roman.ttf', 300)
 
 # Get the width of the text in pixels
-text_width, text_height = font.getsize('TARZAN')
+text_width, text_height = font.getsize('WATCHMEN')
 
 # Calculate x and y coordinates for the text
 x = width // 2 - text_width // 2
 y = height - 600
 
 # Add a title to the image
-add_title(image, 'TARZAN', 'DidotLTPro-Roman.ttf', 300, x, y, (1,1,1))
+add_title(image, 'WATCHMEN', 'fonts/DidotLTPro-Roman.ttf', 300, x, y, (1,1,1))
 
 # Save the modified image
-image.save('tarzanFinal.jpg')
+image.save("/home/diego/MovieToColorsImage/images/Watchmen/WatchmenFinal.jpg")
