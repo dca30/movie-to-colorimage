@@ -1,9 +1,8 @@
 import os
-import cv2
 import numpy as np
 from PIL import Image
 
-path = '/home/diego/code/movie-timeline-colors'
+path = '/home/dcalvo/code/movie-timeline-colors'
 
 # Create a variable to store the input and output directories
 input_dir = os.path.join(path, 'files')
@@ -18,7 +17,7 @@ for filename in os.listdir(input_dir):
     if filename.endswith('.txt'):
         # Get the base name of the file (without the .txt extension)
         base_name = os.path.splitext(filename)[0]
-        
+
         # Open the file with the RGB colors
         with open(os.path.join(input_dir, filename), 'r') as colors_file:
             # Read the colors from the file and store them in a list
@@ -26,24 +25,24 @@ for filename in os.listdir(input_dir):
             for line in colors_file:
                 r, g, b = map(float, line.strip().split())
                 colors.append((b, g, r))
-        
+
         # Create an image with one vertical bar for each color
         height = 100
         width = len(colors)
         image = np.zeros((height, width, 3), dtype=np.uint8)
         for i, color in enumerate(colors):
             image[:, i] = color
-        
+
         # Open the image with the RGB colors using the Image module
         img = Image.fromarray(image)
-        
+
         # Resize the image
         resized_image = img.resize((1920, 1080))
-        
+
         # Create a blank image with the desired resolution
         final_image = Image.new('RGB', (1920, 1080))
         pixels = final_image.load()
-        
+
         # Iterate through the pixels and set the color for each pixel
         for i in range(1920):
             for j in range(1080):
@@ -53,6 +52,10 @@ for filename in os.listdir(input_dir):
 
         final_image = final_image.transpose(Image.ROTATE_270)
 
-        # Save the modified image
-        final_image.save(os.path.join(output_dir, f'{base_name}.jpg'))
+        # Save the modified image if not exists
+        output_file = os.path.join(output_dir, f'{base_name}.jpg')
+        if os.path.isfile(output_file):
+            print(f'{output_file} already exists, skipping...')
+            continue
+        final_image.save(output_file)
         print(f'{base_name} done')
