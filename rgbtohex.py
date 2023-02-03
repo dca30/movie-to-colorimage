@@ -1,3 +1,14 @@
+file_name = "/home/dcalvo/code/movie-timeline-colors/files/adastra1.txt"
+
+with open(file_name, 'r') as file:
+    lines = file.readlines()
+
+with open(file_name, 'w') as file:
+    for line in lines:
+        file.write(line[1:])
+
+'''
+#transform rgb into hexadecimal
 import os
 
 def float_to_hex(float_rgb):
@@ -16,7 +27,7 @@ for filename in os.listdir(directory):
         with open(os.path.join(directory, filename), 'w') as f:
             f.writelines(hex_colors)
 
-'''
+
 import cv2
 import numpy as np
 import sys
